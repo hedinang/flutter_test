@@ -1,31 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learn/pages/home/widgets/home_weather_icon.dart';
 import 'package:learn/widgets/input.dart';
-
-// class HomePage extends StatelessWidget {
-//   const HomePage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Container(
-//         alignment: Alignment.center,
-//         decoration: const BoxDecoration(
-//             gradient: LinearGradient(
-//                 begin: Alignment.topCenter,
-//                 end: Alignment.bottomCenter,
-//                 colors: [
-//               Color(0xffde4848),
-//               Color.fromARGB(255, 240, 227, 47)
-//             ])),
-//         child: const Column(
-//           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//           children: [HomeWeatherIcon(), HomeWeatherIcon()],
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,40 +11,43 @@ class HomePage extends StatefulWidget {
 class HomePateState extends State<HomePage> {
   String url = 'assets/images/weathers/rabbit.jpg';
   late String email = "";
+  late String password;
 
   @override
   void initState() {
     super.initState();
     email = "";
-  }
-
-  late String password;
-
-  void _setUrl() {
-    setState(() {
-      if (url == 'assets/images/weathers/rabbit.jpg') {
-        url = "assets/images/weathers/cat.jpg";
-      } else {
-        url = "assets/images/weathers/rabbit.jpg";
-      }
-    });
+    password = "";
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+        body: Container(
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(colors: [
+        Color.fromARGB(255, 50, 130, 235),
+        Color.fromARGB(255, 36, 171, 224)
+      ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+      child: Column(
         children: [
-          HomeWeatherIcon(
-            url: url,
+          Padding(
+              padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
+              child: Image.asset("assets/images/weathers/korea-map.jpg")),
+          Input(
+            title: "Email",
+            data: email,
+            iconData: Icons.email,
+            obscure: false,
           ),
-          TextButton(
-            onPressed: _setUrl,
-            child: const Text("hello"),
-          ),
-          Input(title: "Email", data: email, iconData: Icons.email,)
+          Input(
+            title: "Password",
+            data: password,
+            iconData: Icons.lock,
+            obscure: true,
+          )
         ],
       ),
-    );
+    ));
   }
 }
