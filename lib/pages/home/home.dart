@@ -1,6 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:learn/api/auth.dart';
 import 'package:learn/model/response_api.dart';
+import 'package:learn/pages/conversationList/conversation_list.dart';
 import 'package:learn/widgets/input.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -57,9 +62,23 @@ class HomePateState extends State<HomePage> {
           // backgroundColor: Colors.red,
           // textColor: Colors.white,
           fontSize: 14.0);
-    } else {}
-    print("dsdsds");
+    } else {
+      Fluttertoast.showToast(
+          msg: "Welcome to winitech services",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 20,
+          // backgroundColor: Colors.red,
+          // textColor: Colors.white,
+          fontSize: 14.0);
+    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ConversationList()),
+    );
   }
+
+  void register() {}
 
   @override
   Widget build(BuildContext context) {
@@ -67,35 +86,79 @@ class HomePateState extends State<HomePage> {
         body: Container(
       decoration: const BoxDecoration(
           gradient: LinearGradient(colors: [
+        Color.fromARGB(255, 36, 171, 224),
         Color.fromARGB(255, 50, 130, 235),
-        Color.fromARGB(255, 36, 171, 224)
       ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
       child: Column(
         children: [
           Padding(
               padding: const EdgeInsets.fromLTRB(60, 30, 60, 10),
-              child: Image.asset("assets/images/weathers/korea-map.jpg")),
+              child: Image.asset("assets/images/weathers/winitech.jpg")),
+          const Text(
+            "Please login to use our services",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
           Input(
             title: "Email",
             data: email,
-            iconData: Icons.email,
+            prefixIcon: Icons.email,
             obscure: false,
+            suffixIcon: null,
           ),
           Input(
             title: "Password",
             data: password,
-            iconData: Icons.lock,
+            prefixIcon: Icons.lock,
+            suffixIcon: Icons.remove_red_eye,
             obscure: true,
           ),
-          OutlinedButton(
-            onPressed: login,
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.green)),
-            child: const Text(
-              "Login",
-              style: TextStyle(color: Colors.black),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              OutlinedButton(
+                onPressed: login,
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color.fromARGB(255, 62, 71, 63))),
+                child: const Text(
+                  "Forget password",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              const Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
+              OutlinedButton(
+                onPressed: login,
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.green)),
+                child: const Text(
+                  "Login",
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
+          ),
+          const Padding(padding: EdgeInsets.fromLTRB(0, 5, 0, 5)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                  style: TextStyle(color: Colors.white), "Not a member?"),
+              const Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
+              GestureDetector(
+                  onTap: () {
+                    Fluttertoast.showToast(msg: "sdsd");
+                  },
+                  child: const Text(
+                    "Signup",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.white),
+                  )),
+            ],
           )
         ],
       ),
