@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:learn/model/conversation.dart';
 import 'package:learn/pages/conversationList/conversation.dart';
-import 'package:learn/pages/home/home.dart';
+import 'package:learn/pages/login/login.dart';
 import 'package:learn/widgets/input.dart';
 
 class ConversationList extends StatelessWidget {
   String data = "sdsdsd";
+  String contentSearch = "ss";
   List<Conversation> conversationList = [
     Conversation(
         imgUrl: "assets/images/weathers/cat.jpg",
@@ -52,11 +52,15 @@ class ConversationList extends StatelessWidget {
 
   ConversationList({super.key});
 
+  void setContentSearch(String aa) {
+    contentSearch = "asdsd";
+  }
+
   @override
   Widget build(BuildContext context) {
     void logout() {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+          context, MaterialPageRoute(builder: (context) => const LoginPage()));
     }
 
     return Scaffold(
@@ -83,10 +87,10 @@ class ConversationList extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
               ),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  const Row(
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -103,8 +107,13 @@ class ConversationList extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(Icons.edit),
-                      Padding(
+                      const Icon(Icons.edit),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      ),
+                      GestureDetector(
+                          onTap: logout, child: const Icon(Icons.logout)),
+                      const Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
                       ),
                     ],
@@ -112,11 +121,13 @@ class ConversationList extends StatelessWidget {
                 ],
               ),
               Input(
-                  title: "Search",
-                  data: data,
-                  prefixIcon: Icons.search,
-                  suffixIcon: null,
-                  obscure: false),
+                title: "Search",
+                data: data,
+                prefixIcon: Icons.search,
+                suffixIcon: null,
+                obscure: false,
+                setData: setContentSearch,
+              ),
               Column(
                   children: conversationList
                       .map((conversation) => ConversationWidget(

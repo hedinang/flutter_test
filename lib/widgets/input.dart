@@ -6,6 +6,7 @@ class Input extends StatefulWidget {
   IconData prefixIcon;
   dynamic suffixIcon;
   bool obscure;
+  void Function(String) setData;
 
   Input(
       {super.key,
@@ -13,7 +14,8 @@ class Input extends StatefulWidget {
       required this.data,
       required this.prefixIcon,
       required this.suffixIcon,
-      required this.obscure});
+      required this.obscure,
+      required this.setData});
 
   @override
   InputState createState() => InputState();
@@ -56,7 +58,7 @@ class InputState extends State<Input> {
           decoration:
               const BoxDecoration(color: Color.fromARGB(255, 23, 114, 167)),
           child: TextField(
-            onChanged: _setData,
+            onChanged: widget.setData,
             style: const TextStyle(color: Colors.white),
             obscureText: obscure,
             decoration: InputDecoration(

@@ -1,26 +1,32 @@
-import 'dart:ui';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:learn/api/auth.dart';
-import 'package:learn/model/response_api.dart';
 import 'package:learn/pages/conversationList/conversation_list.dart';
 import 'package:learn/widgets/input.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  HomePateState createState() => HomePateState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class HomePateState extends State<HomePage> {
+class LoginPageState extends State<LoginPage> {
   AuthApi authApi = AuthApi();
   String url = 'assets/images/weathers/rabbit.jpg';
   late String email;
   late String password;
+
+  void _setEmail(newEmail) {
+    setState(() => email = newEmail);
+  }
+
+  void _setPassword(newPassword) {
+    setState(() => password = newPassword);
+  }
 
   @override
   void initState() {
@@ -63,6 +69,9 @@ class HomePateState extends State<HomePage> {
           // textColor: Colors.white,
           fontSize: 14.0);
     } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      print(prefs.getString("accessToken"));
+      prefs.setString('accessToken', result.data["token"]);
       Fluttertoast.showToast(
           msg: "Welcome to winitech services",
           toastLength: Toast.LENGTH_SHORT,
@@ -71,11 +80,11 @@ class HomePateState extends State<HomePage> {
           // backgroundColor: Colors.red,
           // textColor: Colors.white,
           fontSize: 14.0);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ConversationList()),
+      );
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ConversationList()),
-    );
   }
 
   void register() {}
@@ -106,6 +115,7 @@ class HomePateState extends State<HomePage> {
             prefixIcon: Icons.email,
             obscure: false,
             suffixIcon: null,
+            setData: _setEmail,
           ),
           Input(
             title: "Password",
@@ -113,6 +123,7 @@ class HomePateState extends State<HomePage> {
             prefixIcon: Icons.lock,
             suffixIcon: Icons.remove_red_eye,
             obscure: true,
+            setData: _setPassword,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
