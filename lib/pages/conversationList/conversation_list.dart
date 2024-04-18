@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn/model/conversation.dart';
 import 'package:learn/pages/conversationList/conversation.dart';
-import 'package:learn/pages/login/login.dart';
 import 'package:learn/widgets/input.dart';
 
 class ConversationList extends StatelessWidget {
@@ -58,9 +57,10 @@ class ConversationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void logout() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const LoginPage()));
+    Future<void> logout() async {
+      // await Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => const LoginPage()));
+      Navigator.pop(context, '/home1');
     }
 
     return Scaffold(

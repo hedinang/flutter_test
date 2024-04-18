@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn/pages/conversationList/conversation_list.dart';
 import 'package:learn/pages/login/login.dart';
 
 class MyApp extends StatelessWidget {
@@ -6,9 +7,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      routes: {
+        '/': (context) => const Login(),
+        '/home': (context) => ConversationList()
+      },
+      // home: LoginPage(),
     );
   }
 }

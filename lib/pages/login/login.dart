@@ -1,3 +1,4 @@
+import 'dart:js';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,14 +8,14 @@ import 'package:learn/widgets/input.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  LoginPageState createState() => LoginPageState();
+  LoginState createState() => LoginState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class LoginState extends State<Login> {
   AuthApi authApi = AuthApi();
   String url = 'assets/images/weathers/rabbit.jpg';
   late String email;
@@ -35,7 +36,7 @@ class LoginPageState extends State<LoginPage> {
     password = "";
   }
 
-  Future<void> login() async {
+  Future<void> login(context) async {
     final result = await authApi.login({'email': email, 'password': password});
     if (result.statusCode == 400) {
       //  showDialog(
@@ -60,17 +61,18 @@ class LoginPageState extends State<LoginPage> {
       //     content: Text('Login failed. Please try again.'),
       //   ),
       // );
-      Fluttertoast.showToast(
-          msg: "Your email or password is wrong",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 20,
-          // backgroundColor: Colors.red,
-          // textColor: Colors.white,
-          fontSize: 14.0);
+      if (mounted) {
+        Fluttertoast.showToast(
+            msg: "Your email or password is wrong",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 20,
+            // backgroundColor: Colors.red,
+            // textColor: Colors.white,
+            fontSize: 14.0);
+      }
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      print(prefs.getString("accessToken"));
       prefs.setString('accessToken', result.data["token"]);
       Fluttertoast.showToast(
           msg: "Welcome to winitech services",
@@ -80,10 +82,7 @@ class LoginPageState extends State<LoginPage> {
           // backgroundColor: Colors.red,
           // textColor: Colors.white,
           fontSize: 14.0);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ConversationList()),
-      );
+      await Navigator.pushNamed(context, '/home');
     }
   }
 
@@ -129,7 +128,7 @@ class LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               OutlinedButton(
-                onPressed: login,
+                onPressed: () => {login(context)},
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
                         const Color.fromARGB(255, 62, 71, 63))),
@@ -140,7 +139,7 @@ class LoginPageState extends State<LoginPage> {
               ),
               const Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0)),
               OutlinedButton(
-                onPressed: login,
+                onPressed: () => {login(context)},
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.green)),
