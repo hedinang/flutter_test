@@ -1,9 +1,5 @@
-import 'dart:js';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:learn/api/auth.dart';
-import 'package:learn/pages/conversationList/conversation_list.dart';
 import 'package:learn/widgets/input.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +12,7 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  AuthApi authApi = AuthApi();
+  static final AuthApi authApi = AuthApi();
   String url = 'assets/images/weathers/rabbit.jpg';
   late String email;
   late String password;
@@ -110,7 +106,6 @@ class LoginState extends State<Login> {
           ),
           Input(
             title: "Email",
-            data: email,
             prefixIcon: Icons.email,
             obscure: false,
             suffixIcon: null,
@@ -118,7 +113,6 @@ class LoginState extends State<Login> {
           ),
           Input(
             title: "Password",
-            data: password,
             prefixIcon: Icons.lock,
             suffixIcon: Icons.remove_red_eye,
             obscure: true,

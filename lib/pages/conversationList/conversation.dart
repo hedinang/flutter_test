@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ConversationWidget extends StatefulWidget {
-  late String imgUrl;
-  String userName;
-  String lastMessage;
-  String lastMessageTs;
+  final String? imgUrl;
+  final String name;
+  final String lastMessage;
+  final String lastMessageTs;
 
-  ConversationWidget(
+  const ConversationWidget(
       {super.key,
       required this.imgUrl,
-      required this.userName,
+      required this.name,
       required this.lastMessage,
       required this.lastMessageTs});
   @override
@@ -17,17 +17,9 @@ class ConversationWidget extends StatefulWidget {
 }
 
 class ConversationState extends State<ConversationWidget> {
-  late String imgUrl;
-  late String userName;
-  late String lastMessage;
-  late String lastMessageTs;
   @override
   void initState() {
     super.initState();
-    imgUrl = widget.imgUrl;
-    userName = widget.userName;
-    lastMessage = widget.lastMessage;
-    lastMessageTs = widget.lastMessageTs;
   }
 
   @override
@@ -39,20 +31,21 @@ class ConversationState extends State<ConversationWidget> {
             const Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0)),
             CircleAvatar(
               radius: 25,
-              backgroundImage: AssetImage(imgUrl),
+              backgroundImage:
+                  AssetImage(widget.imgUrl ?? 'assets/images/weathers/cat.jpg'),
             ),
             const Padding(padding: EdgeInsets.fromLTRB(10, 10, 10, 10)),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  userName,
+                  widget.name,
                 ),
                 Row(
                   children: [
-                    Text(lastMessage),
+                    Text(widget.lastMessage),
                     const Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 10)),
-                    Text('.$lastMessageTs')
+                    Text(widget.lastMessageTs)
                   ],
                 )
               ],

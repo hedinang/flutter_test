@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Input extends StatefulWidget {
-  String title;
-  dynamic data;
-  IconData prefixIcon;
-  dynamic suffixIcon;
-  bool obscure;
-  void Function(String) setData;
+  final String title;
+  final IconData prefixIcon;
+  final dynamic suffixIcon;
+  final bool obscure;
+  final void Function(String) setData;
 
-  Input(
+  const Input(
       {super.key,
       required this.title,
-      required this.data,
       required this.prefixIcon,
       required this.suffixIcon,
       required this.obscure,
@@ -22,26 +20,12 @@ class Input extends StatefulWidget {
 }
 
 class InputState extends State<Input> {
-  late String data;
-  late String title;
-  late IconData prefixIcon;
-  late dynamic suffixIcon;
-  late bool obscure = false;
+  late bool obscure;
 
   @override
   void initState() {
     super.initState();
-    data = widget.data;
-    title = widget.title;
-    prefixIcon = widget.prefixIcon;
-    suffixIcon = widget.suffixIcon;
     obscure = widget.obscure;
-  }
-
-  void _setData(value) {
-    setState(() {
-      data = value;
-    });
   }
 
   void showOrHidePassword() {
@@ -60,20 +44,20 @@ class InputState extends State<Input> {
           child: TextField(
             onChanged: widget.setData,
             style: const TextStyle(color: Colors.white),
-            obscureText: obscure,
+            obscureText: widget.obscure,
             decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: title,
+              hintText: widget.title,
               hintStyle:
                   const TextStyle(color: Color.fromARGB(255, 46, 41, 41)),
               prefixIcon: Icon(
-                prefixIcon,
+                widget.prefixIcon,
                 color: Colors.white,
               ),
               suffixIcon: GestureDetector(
                   onTap: showOrHidePassword,
                   child: Icon(
-                    suffixIcon,
+                    widget.suffixIcon,
                     color: Colors.white,
                   )),
             ),

@@ -1,68 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:learn/api/conversation.dart';
 import 'package:learn/model/conversation.dart';
 import 'package:learn/pages/conversationList/conversation.dart';
 import 'package:learn/widgets/input.dart';
 
-class ConversationList extends StatelessWidget {
-  String data = "sdsdsd";
-  String contentSearch = "ss";
-  List<Conversation> conversationList = [
-    Conversation(
-        imgUrl: "assets/images/weathers/cat.jpg",
-        userName: "Dũng Trần",
-        lastMessage: "Hello how are you",
-        lastMessageTs: "19:10"),
-    Conversation(
-        imgUrl: "assets/images/weathers/cat.jpg",
-        userName: "Andrew",
-        lastMessage: "I am fine",
-        lastMessageTs: "19:12"),
-    Conversation(
-        imgUrl: "assets/images/weathers/cat.jpg",
-        userName: "Dũng Trần",
-        lastMessage: "Hello how are you",
-        lastMessageTs: "19:10"),
-    Conversation(
-        imgUrl: "assets/images/weathers/cat.jpg",
-        userName: "Andrew",
-        lastMessage: "I am fine",
-        lastMessageTs: "19:12"),
-    Conversation(
-        imgUrl: "assets/images/weathers/cat.jpg",
-        userName: "Dũng Trần",
-        lastMessage: "Hello how are you",
-        lastMessageTs: "19:10"),
-    Conversation(
-        imgUrl: "assets/images/weathers/cat.jpg",
-        userName: "Andrew",
-        lastMessage: "I am fine",
-        lastMessageTs: "19:12"),
-    Conversation(
-        imgUrl: "assets/images/weathers/cat.jpg",
-        userName: "Dũng Trần",
-        lastMessage: "Hello how are you",
-        lastMessageTs: "19:10"),
-    Conversation(
-        imgUrl: "assets/images/weathers/cat.jpg",
-        userName: "Andrew",
-        lastMessage: "I am fine",
-        lastMessageTs: "19:12")
-  ];
+class ConversationList extends StatefulWidget {
+  static const int limit = 10;
+  static ConversationApi conversationApi = ConversationApi();
 
-  ConversationList({super.key});
+  const ConversationList({super.key});
 
-  void setContentSearch(String aa) {
-    contentSearch = "asdsd";
+  @override
+  ConversationListState createState() => ConversationListState();
+}
+
+class ConversationListState extends State<ConversationList> {
+  List<Conversation> conversationList = [];
+  String contentSearch = '';
+  DateTime ts = DateTime.now();
+  @override
+  void initState() {
+    super.initState();
+    _setContentSearch('');
+  }
+
+  void _setConversationList(data) {
+    setState(() {
+      conversationList = data;
+    });
+  }
+
+  Future<void> _setContentSearch(contentSearchInput) async {
+    final result = await ConversationList.conversationApi.getList({
+      'limit': ConversationList.limit,
+      'ts': ts.toIso8601String(),
+      'search': {'searchName': contentSearchInput}
+    });
+
+    if (result.statusCode == 400) {
+      print("aaa");
+    } else {
+      List<Conversation> aa = result.data
+          .map<Conversation>((r) => Conversation(
+              null, r['name'], r['lastMessage'], r['lastMessageTs']))
+          .toList();
+      _setConversationList(aa);
+    }
+  }
+
+  void logout(BuildContext context) {
+    Navigator.pop(context, '/home1');
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<void> logout() async {
-      // await Navigator.push(
-      //     context, MaterialPageRoute(builder: (context) => const LoginPage()));
-      Navigator.pop(context, '/home1');
-    }
-
     return Scaffold(
       body: Stack(
         children: [
@@ -112,7 +103,8 @@ class ConversationList extends StatelessWidget {
                         padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                       ),
                       GestureDetector(
-                          onTap: logout, child: const Icon(Icons.logout)),
+                          onTap: () => {logout(context)},
+                          child: const Icon(Icons.logout)),
                       const Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
                       ),
@@ -122,17 +114,16 @@ class ConversationList extends StatelessWidget {
               ),
               Input(
                 title: "Search",
-                data: data,
                 prefixIcon: Icons.search,
                 suffixIcon: null,
                 obscure: false,
-                setData: setContentSearch,
+                setData: _setContentSearch,
               ),
               Column(
                   children: conversationList
                       .map((conversation) => ConversationWidget(
-                          imgUrl: conversation.imgUrl,
-                          userName: conversation.userName,
+                          imgUrl: conversation.imgUrl ?? '',
+                          name: conversation.name,
                           lastMessage: conversation.lastMessage,
                           lastMessageTs: conversation.lastMessageTs))
                       .toList()),
